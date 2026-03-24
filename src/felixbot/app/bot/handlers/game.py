@@ -188,7 +188,7 @@ async def cmd_stop(msg: Message, state: FSMContext, redis_repo: RedisRepo, i18n:
 
     await state.clear()
     await redis_repo.delete_game(tg_id)
-    await msg.edit_text(i18n.stop())
+    await msg.answer(i18n.stop())
 
 
 @router.message(GameSG.start)
