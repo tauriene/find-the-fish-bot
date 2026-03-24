@@ -1,3 +1,5 @@
+from zoneinfo import ZoneInfo
+
 from aiogram import Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message, CallbackQuery
@@ -40,10 +42,13 @@ async def cmd_stats(msg: Message, db_repo: DbRepo, i18n: TranslatorRunner):
 def format_game(game: Game, index: int, total: int, i18n):
     result = "🏆" if game.is_win else "❌"
 
+    ended_at_utc = game.ended_at
+    ended_at_tz= ended_at_utc.astimezone(ZoneInfo("Europe/Moscow"))
+
     return (
         f"{i18n.games.title()}: {index + 1} / {total}\n\n"
         f"{i18n.result()}: {result}\n\n"
-        f"{i18n.finished.at()}: {game.ended_at.strftime('%d.%m.%Y %H:%M')}"
+        f"{i18n.finished.at()}: {ended_at_tz.strftime('%d.%m.%Y %H:%M')}"
     )
 
 
