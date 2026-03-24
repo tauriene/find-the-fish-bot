@@ -2,6 +2,8 @@ import asyncio
 import random
 
 from datetime import datetime
+from zoneinfo import ZoneInfo
+
 from aiogram import Router, F
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
@@ -115,7 +117,8 @@ async def cb_clicked(
         await redis_repo.delete_game(tg_id)
         await state.clear()
 
-        await db_repo.add_game(tg_id, ended_at=datetime.utcnow(), is_win=True)
+
+        await db_repo.add_game(tg_id, ended_at=datetime.now(tz=ZoneInfo('Europe/Moscow')), is_win=True)
         await db_repo.increment_user_wins(tg_id)
         return
 
@@ -139,7 +142,7 @@ async def cb_clicked(
         await redis_repo.delete_game(tg_id)
         await state.clear()
 
-        await db_repo.add_game(tg_id, ended_at=datetime.utcnow(), is_win=False)
+        await db_repo.add_game(tg_id, ended_at=datetime.now(tz=ZoneInfo('Europe/Moscow')), is_win=False)
         await db_repo.increment_user_defeats(tg_id)
         return
 
