@@ -179,15 +179,16 @@ async def cb_cancel(cb: CallbackQuery, state: FSMContext, i18n: TranslatorRunner
 
 
 @router.message(Command("stop"), ~StateFilter(GameSG.start))
-async def cmd_stop(msg: Message, redis_repo: RedisRepo, i18n: TranslatorRunner):
+async def cmd_stop(msg: Message, state: FSMContext, redis_repo: RedisRepo, i18n: TranslatorRunner):
     tg_id = msg.from_user.id
 
     if not await redis_repo.exists(tg_id):
         await msg.reply(i18n.no.active.game())
         return
 
+    await state.clear()
     await redis_repo.delete_game(tg_id)
-    await msg.reply(i18n.stop())
+    await msg.edit_text(i18n.stop())
 
 
 @router.message(GameSG.start)

@@ -59,7 +59,7 @@ class DbRepo:
         return list(result)
 
     async def get_top_users(self, limit: int) -> list[User]:
-        stmt = select(User).order_by(User.wins).limit(limit)
+        stmt = select(User).order_by(User.wins.desc(), User.id).limit(limit)
 
         result = await self.session.scalars(stmt)
         return list(result)

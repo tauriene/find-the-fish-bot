@@ -4,14 +4,14 @@ services:
     restart: unless-stopped
     depends_on:
       db:
-          condition: service_healthy
+        condition: service_healthy
       redis:
         condition: service_healthy
+    env_file:
+      - ".env"
 
   db:
     image: postgres:17-alpine
-    ports:
-      - "5432:5432"
     env_file:
       - ".env"
     volumes:
@@ -28,8 +28,6 @@ services:
     image: redis:7-alpine
     env_file:
       - ".env"
-    ports:
-      - "6379:6379"
     command: >
       redis-server --requirepass ${REDIS_PASSWORD}
     volumes:

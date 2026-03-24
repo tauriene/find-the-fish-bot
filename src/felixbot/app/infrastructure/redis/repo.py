@@ -12,7 +12,7 @@ class RedisRepo:
 
     async def save_game(self, tg_id: int, data: dict) -> None:
         data_json = json.dumps(data)
-        await self.redis.set(self._game_key(tg_id), data_json, ex=50)
+        await self.redis.set(self._game_key(tg_id), data_json, ex=300)
 
     async def get_game(self, tg_id: int) -> dict | None:
         game = await self.redis.get(self._game_key(tg_id))
